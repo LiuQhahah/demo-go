@@ -14,6 +14,8 @@ import (
 // 2024/04/18 19:38:57 fLittleEndian value:800000001
 // 2024/04/18 19:38:57 fBigEndian value:100000008000000
 func main() {
+	logger := log.New(os.Stdout, "prefix", log.LstdFlags|log.Lshortfile)
+
 	// Open the file in write mode
 	fLittleEndian, err := os.OpenFile("./file/LittleEndian.txt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
@@ -40,7 +42,10 @@ func main() {
 	var length int64
 
 	err = binary.Read(fLittleEndian, binary.LittleEndian, &length)
-	log.Printf("fLittleEndian value:%x", length)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	logger.Printf("fLittleEndian value:%x", length)
 
 	// Open the file in write mode
 	fBigEndian, err := os.OpenFile("./file/BigEndian.txt", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
@@ -52,9 +57,14 @@ func main() {
 	// Write a 4-byte integer of value 0 to the file
 	var zeroBigEndian int32 = 1
 	err = binary.Write(fBigEndian, binary.LittleEndian, zeroBigEndian)
+	if err != nil {
+		logger.Fatal(err)
+	}
 	zeroBigEndian = 8
 	err = binary.Write(fBigEndian, binary.LittleEndian, zeroBigEndian)
-
+	if err != nil {
+		logger.Fatal(err)
+	}
 	if err != nil {
 		panic(err)
 	}
@@ -66,6 +76,22 @@ func main() {
 	}
 
 	err = binary.Read(fBigEndian, binary.BigEndian, &length)
-	log.Printf("fBigEndian value:%x", length)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	logger.Printf("fBigEndian value:%x", length)
+	var twice int64
+	err = binary.Read(fBigEndian, binary.BigEndian, &twice)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	logger.Printf("fBigEndian value:%x", twice)
+
+	var again int64
+	err = binary.Read(fBigEndian, binary.BigEndian, &again)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	logger.Printf("fBigEndian value:%x", again)
 
 }
