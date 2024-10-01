@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"context"
 	"fmt"
@@ -140,3 +141,4 @@ func RebalanceDesiredRoutines(currentRoutines int, desiredRoutines int) int {
 
 	return currentRoutines * multiple
 }
+*/
